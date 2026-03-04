@@ -1,0 +1,33 @@
+articles as data structures. more like git tree than file structure. 
+
+grantelder.com is homepage so it lives at /~
+each page has a header + blurb
+each page is like a folder with a blurb
+within the pages are either external links or markdown files (like a blog)
+sourcehut tree format (and the way i view it) is the most complex way my site will look like
+
+Here are my "folders" i want to include
+cv
+portfolio
+skills
+connections
+literate programming
+dependencies
+architecture
+
+cv portfolio and skills are straightforward as they either connect to a markdown page with content or links to external content
+in the literate programming folder lives a markdown-style blog where i attempt to write about software through immersion
+architecture folder will contain another blog about my thoughts and writings about web architecture and software architecture and design
+finally dependencies contain links to tools, etc of how i created my site
+	THIS will help with the development of the different site elements (I want to use Go. most of these are microservices, etc for displaying site tree elegantly). essentially tools that i created to design the site
+	tools i will need to develop are below:
+depend: a tool that gathers markdown, etc and connects my go tools together (meta but will be how dependencies folder is created) 
+nav: a header that allows you to navigate and view folders and markdown files similar to sourcehut (will include ~/folders navigation, timestamps, permalinks, organization
+quest: an expandable header that displays questions that this project (grantelder.com) is trying to answer or problems i am trying to solve. include status, links to pages as answers, etc)
+blurbs: display title header with some text that tells what it does. governs data structure and how to display these blurbs in markdown git tree
+pub: system to generate and publish mostly plaintext site through GitHub pages or other free hosting platform
+toc: a navigational sidebar to help navigate more complex tables of contents for every page (can be hidden)
+linc: system for more complex hyperlinks and styles between markdown folders and different content. work with footy to put more unimportant links in the footer
+footy: like the header, footer  is simple and may contain relevant links (generated depending on architecture)
+oigit: tiny git protocol that helps me develop and mirror structure of site using git. version control (can include link to previous versions through site) 
+authentik: tiny authentication system. this functionality will one day allow me to build out the site content through the simple web interface
