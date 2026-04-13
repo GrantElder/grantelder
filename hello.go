@@ -1,11 +1,13 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"html"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -40,10 +42,29 @@ const pageTemplate = `<!doctype html>
 </html>`
 
 func main() {
+	publish := flag.Bool("publish", false, "write static site output to docs/")
+	outDir := flag.String("out", "docs", "output directory for static publish")
+	domain := flag.String("domain", "grantelder.com", "custom domain written to CNAME when publishing")
+	flag.Parse()
+
+	routes := []sitePage{
+		{Route: "/", SourcePath: "pages/index.md", Title: "grantelder.com"},
+		{Route: "/other", SourcePath: "pages/other.md", Title: "other ideas"},
+		{Route: "/progress", SourcePath: "pages/progress.md", Title: "progress"},
+	}
+
+	if *publish {
+		if err := publishStatic(routes, *outDir, *domain); err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("published static site to %s", *outDir)
+		return
+	}
+
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", serveMarkdownPage("/", "pages/index.md", "grantelder.com"))
-	mux.HandleFunc("/other", serveMarkdownPage("/other", "pages/other.md", "other ideas"))
-	mux.HandleFunc("/progress", serveMarkdownPage("/progress", "pages/progress.md", "progress"))
+	for _, p := range routes {
+		mux.HandleFunc(p.Route, serveMarkdownPage(p))
+	}
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -56,23 +77,71 @@ func main() {
 	}
 }
 
-func serveMarkdownPage(route, path, title string) http.HandlerFunc {
+type sitePage struct {
+	Route      string
+	SourcePath string
+	Title      string
+}
+
+func serveMarkdownPage(page sitePage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != route {
+		if r.URL.Path != page.Route {
 			http.NotFound(w, r)
 			return
 		}
 
-		content, err := os.ReadFile(path)
+		htmlPage, err := renderPage(page)
 		if err != nil {
 			http.Error(w, "could not read page", http.StatusInternalServerError)
 			return
 		}
 
-		body := renderSimpleMarkdown(string(content))
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprintf(w, pageTemplate, title, body)
+		fmt.Fprint(w, htmlPage)
 	}
+}
+
+func renderPage(page sitePage) (string, error) {
+	content, err := os.ReadFile(page.SourcePath)
+	if err != nil {
+		return "", err
+	}
+	body := renderSimpleMarkdown(string(content))
+	return fmt.Sprintf(pageTemplate, page.Title, body), nil
+}
+
+func publishStatic(routes []sitePage, outDir, domain string) error {
+	if err := os.RemoveAll(outDir); err != nil {
+		return err
+	}
+	if err := os.MkdirAll(outDir, 0755); err != nil {
+		return err
+	}
+
+	for _, page := range routes {
+		htmlPage, err := renderPage(page)
+		if err != nil {
+			return err
+		}
+		targetPath := outputFilePath(outDir, page.Route)
+		if err := os.MkdirAll(filepath.Dir(targetPath), 0755); err != nil {
+			return err
+		}
+		if err := os.WriteFile(targetPath, []byte(htmlPage), 0644); err != nil {
+			return err
+		}
+	}
+
+	// Keep custom domain mapping stable on GitHub Pages.
+	return os.WriteFile(filepath.Join(outDir, "CNAME"), []byte(domain+"\n"), 0644)
+}
+
+func outputFilePath(outDir, route string) string {
+	if route == "/" {
+		return filepath.Join(outDir, "index.html")
+	}
+	trimmed := strings.TrimPrefix(route, "/")
+	return filepath.Join(outDir, trimmed, "index.html")
 }
 
 func renderSimpleMarkdown(src string) string {
