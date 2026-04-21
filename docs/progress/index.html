@@ -4,16 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>progress</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { margin: 0; padding: 2rem 1rem; font-family: Georgia, "Times New Roman", serif; color: #111; background: #fff; }
-    main { max-width: 760px; margin: 0 auto; line-height: 1.55; }
-    nav { margin-bottom: 1.5rem; }
-    nav a { margin-right: 1rem; color: #1a1a1a; }
-    nav a.progress-link { color: #b00020; font-weight: 700; background: #ffe8ee; padding: 0.1rem 0.4rem; border-radius: 4px; }
-    h1, h2, h3 { line-height: 1.2; margin-top: 1.3em; margin-bottom: 0.5em; }
-    p { margin: 0.7em 0; }
-    ul { margin: 0.5em 0 0.8em 1.4em; }
-    blockquote { margin: 0.8em 0; padding-left: 0.8em; border-left: 3px solid #ddd; color: #444; }
+    body { margin: 36px auto; max-width: 700px; padding: 0 14px; font: 17px/1.62 "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; color: #222; background: #fff; }
+    main { max-width: 100%; margin: 0 auto; }
+    nav { margin-bottom: 1rem; font-size: 0.96em; }
+    nav a { margin-right: 0.9rem; color: inherit; text-decoration: underline; }
+    nav a.progress-link { color: #b00020; font-weight: 700; }
+    h1, h2, h3 { line-height: 1.22; margin-top: 1.1em; margin-bottom: 0.4em; }
+    h1 { font-size: 1.65em; }
+    h2 { font-size: 1.28em; }
+    h3 { font-size: 1.08em; }
+    p, ul, ol, blockquote, pre { margin: 0.62em 0; }
+    ul, ol { padding-left: 1.3em; }
+    blockquote { margin-left: 0; padding-left: 0.75em; border-left: 2px solid #ccc; color: inherit; }
+    pre { padding: 0.58em 0.78em; overflow-x: auto; border: 1px solid #ddd; font-size: 0.92em; }
+    code { font-family: Consolas, "Courier New", monospace; font-size: 0.95em; }
+    hr { border: 0; border-top: 1px solid #ddd; margin: 1.2em 0; }
+    table { border-collapse: collapse; width: 100%; margin: 0.9em 0; }
+    th, td { border: 1px solid #ddd; padding: 0.35em 0.55em; text-align: left; }
   </style>
 </head>
 <body>
@@ -24,22 +35,43 @@
       <a class="progress-link" href="/progress">progress</a>
     </nav>
     <h1>progress</h1>
-<h2>current setup</h2>
+<h2>text filled out so far</h2>
 <ul>
-<li>go server is serving markdown pages</li>
-<li>routes live at `/`, `/other`, and `/progress`</li>
-<li>nav always includes this page as a highlighted link</li>
+<li><code>index.md</code>: main identity blurb, homepage structure, and top-level direction</li>
+<li><code>other.md</code>: organized idea backlog with sections (<code>firethief</code>, <code>trails</code>, <code>gragent</code>, <code>diffeq club</code>, etc.)</li>
+<li><code>progress.md</code>: now tracking completed work + next steps</li>
+<li>created skeleton pages for homepage links: <code>cv</code>, <code>portfolio</code>, <code>skills</code>, <code>socials</code>, <code>literate programming</code>, <code>microservices</code>, <code>architecture</code></li>
 </ul>
-<h2>now</h2>
+<h2>site/content state</h2>
 <ul>
-<li>get these three pages stable and online</li>
-<li>keep content plain, readable, and easy to update</li>
+<li>markdown rendering now uses goldmark (better standard markdown support)</li>
+<li>routes are set up for core pages and new skeleton pages</li>
+<li>homepage links now point to route paths (ex: <code>/portfolio</code>) instead of loose <code>.md</code> paths</li>
+<li>output can be published to <code>docs/</code> for GitHub Pages</li>
+<li>typography was adjusted toward a more default, readable web style</li>
+<li>Open Sans is loaded from Google Fonts for a cleaner minimalist look</li>
 </ul>
-<h2>next</h2>
+<h2>what to do next</h2>
 <ul>
-<li>add one new page at a time</li>
-<li>build small tooling for publishing workflow</li>
-<li>I HAVE A LOT OF IDEAS TO IMPLEMENT</li>
+<li>fill out each skeleton page with first-pass content (short and useful before polish)</li>
+<li>decide page structure conventions (titles, blurbs, sections, links, footer style)</li>
+<li>tighten organization of idea pages: separate active projects vs future ideas vs essays</li>
+</ul>
+<h2>tooling roadmap from homepage + other.md</h2>
+<ul>
+<li><code>listit</code>: structure complex page elements</li>
+<li><code>nav</code>: navigation and route model</li>
+<li><code>head</code>: page header and metadata conventions</li>
+<li><code>quest</code>: question/checklist sections that map to answer pages</li>
+<li><code>blurby</code>: consistent subheading and blurb format</li>
+<li><code>pub</code>: publishing pipeline from markdown to live site</li>
+<li><code>toc</code>: optional table-of-contents block for long pages</li>
+<li><code>styl</code>: minimalist readability defaults</li>
+<li><code>linc</code>: internal linking conventions between related pages</li>
+<li><code>footy</code>: lightweight footer pattern</li>
+<li><code>oigit</code>: simple version-history surface tied to git</li>
+<li><code>authentik</code>: admin/auth layer for future editing workflow</li>
+<li><code>treemaker</code>: structure/generate future pages</li>
 </ul>
 
   </main>
